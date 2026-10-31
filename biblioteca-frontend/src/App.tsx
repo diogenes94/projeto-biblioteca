@@ -1,29 +1,28 @@
-import React, { useState, type FormEvent, type ChangeEvent } from "react";
-import { Book, PlusCircle, Trash2, User, Search, Library } from 'lucide-react';
-import type { Livro } from './types.tsx';
+import React, { useState } from "react";
+import Navbar from './components/Navbar';
+import Notification from './components/Notification';
+import AutoresView from './components/AutoresView';
+import ClientesView from './components/ClientesView';
+
 
 export default function App() {
+    const [telaAtiva, setTelaAtiva] = useState('autores');
 
-    const [livros, setLivros] = useState<Livro[]>([
-        {
-            id: 1,
-            titulo: "Clean Code",
-            autor: "Robert C. Martin",
-            ano_publicacao: 2008,
-            isbn: "978-0132350884"
-        },
-        {
-            id: 2,
-            titulo: "The Pragmatic Programmer",
-            autor: "Andrew Hunt",
-            ano_publicacao: 2000,
-            isbn: "978-0201616224"
-        },
-    ]);
+    const [notification, setNotification] = useState(null);
 
-    const [titulo, setTitulo] = useState<string>("");
-    const [autor, setAutor] = useState<string>("");
-    const [ano_publicacao, setAnoPublicacao] = useState<string>("");
-    const [isbn, setIsbn] = useState<string>("");
+    const showNotification = (message, type = 'success') => {
+        setNotification({ message, type });
+    }
 
+    return (
+        <div className="container">
+            <Navbar telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} />
+            <Notification notification={notification} onDismiss={() => setNotification(null)} />
+
+            <main className="main-area">
+                {telaAtiva === 'autores' && <AutoresView showNotification={showNotification} />}
+                {telaAtiva === 'clientes' && <ClientesView showNotification={showNotification} />}
+            </main>
+        </div>
+    )
 }
